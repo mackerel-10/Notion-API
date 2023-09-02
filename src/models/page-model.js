@@ -1,28 +1,26 @@
 const db = require('./index');
 
-exports.pageModel = {
-  selectParentPage: async function () {
+const pageModel = {
+  selectParentPage: async function (id) {
     try {
-      // parent_page가 null일때까지 반복 breadcrumbs head에 삽입
-      // Linked List 활용해서 앞에 삽입
       query = `
         SELECT page.parent_page, parentpage.title, page.title
         FROM page
-        INNER JOIN page AS parentpage
+        LEFT JOIN page AS parentpage
         ON page.parent_page = parentpage.id
-        WHERE page.id = ?;
+        WHERE page.id = ${id};
       `;
 
       const connection = await db.getConnection(); // DB pool 연결
       const result = await connection.query(query);
       connection.release();
 
-      return result;
+      return result[0][0];
     } catch (error) {
       console.error(error);
     }
   },
-  selectSubPages: async function () {
+  selectSubPages: async function (id) {
     try {
       query = `
         SELECT title
@@ -34,11 +32,11 @@ exports.pageModel = {
       const subPages = await connection.query(query);
       connection.release();
 
-      return subPages;
+      return subPages[0];
     } catch (error) {
       console.error(error);
     }
   },
 };
 
-module.exports = db;
+module.exports = pageModel;

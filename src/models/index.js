@@ -1,12 +1,16 @@
 const mysql = require('mysql2/promise');
 
-const db = mysql.createPool(process.env.MYSQL_URL);
-
-db.on('connection', () => {
-  console.log('MySQL connected!');
+const db = mysql.createPool({
+  host: 'localhost',
+  port: 3307,
+  user: 'root',
+  password: '',
+  database: 'notion',
 });
+
+db.on('connection', () => console.log('MySQL connected!'));
 db.on('error', (error) => {
-  console.error('MySQL failed', error);
+  throw new Error(error);
 });
 
-exports.db = db;
+module.exports = db;
