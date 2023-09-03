@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
-const db = require('./models/page-model');
 const getNotionPage = require('./services/page-service');
 
 const app = express();
