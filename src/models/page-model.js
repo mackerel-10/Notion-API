@@ -4,7 +4,7 @@ const pageModel = {
   selectParentPage: async function (id) {
     try {
       query = `
-        SELECT page.parent_page, parentpage.title, page.title
+        SELECT page.parent_page, parentpage.title, page.title, page.depth
         FROM page
         LEFT JOIN page AS parentpage
         ON page.parent_page = parentpage.id
